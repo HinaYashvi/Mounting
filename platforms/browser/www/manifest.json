@@ -6,7 +6,13 @@
   "version": "com.phonegap.Mounting",
   "description": "This app is developed for Mounting Horizons.",
   "author": "Mounting Horizons Team",
-  "icons": [],
+  "icons": [
+    {
+      "src": "icon.png",
+      "type": "image/png",
+      "sizes": "undefinedxundefined"
+    }
+  ],
   "orientation": "portrait",
   "start_url": "index.html"
 }

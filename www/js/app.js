@@ -54,10 +54,45 @@ document.addEventListener("deviceready", checkStorage, false);
 document.addEventListener("deviceready", onDeviceReady, false);
 document.addEventListener("backbutton", onBackKeyDown, false);
 function onDeviceReady() { 
-  cordova.plugins.IMEI(function (err, imei) {
-    console.log('imei='+imei);
-    alert('imei='+ imei);
-  });
+  /*cordova.plugins.IMEI(function (error, imei) {
+    var imei_num = imei;
+    $.ajax({
+      type:'POST', 
+      url:'https://csr.mountinghorizons.org/sugarcrm/index.php?entryPoint=app_verifyIMEI&IMEI='+imei_num,  
+      success:function(imei_result){
+        alert(imei_result +" = imei_result");
+        if(imei_result=='Success'){
+          
+        }else{
+          app.dialog.alert("IMEI is not registered to our database");
+          return false;
+        }
+      }
+    }); 
+  },function(error){
+    app.dialog.alert(error+" Unable to get IMEI");
+    return false;
+  });*/
+
+  var imei_num = 866410030542785;
+  $.ajax({
+    type:'POST', 
+    url:'https://csr.mountinghorizons.org/sugarcrm/index.php?entryPoint=app_verifyIMEI&IMEI='+imei_num,  
+    success:function(imei_result){
+      alert(imei_result +" = imei_result");
+      if(imei_result=='Success'){
+          navigator.geolocation.getCurrentPosition(function (position){
+            var lat = position.coords.latitude;
+            var long = position.coords.longitude;
+            console.log("latitude = "+lat+"----longitude = "+long);
+            alert("latitude = "+lat+"----longitude = "+long);
+          });
+      }else{
+        app.dialog.alert("IMEI is not registered to our database");
+        return false;
+      }
+    }
+  }); 
 }
 function onBackKeyDown() {
   checkConnection(); 
