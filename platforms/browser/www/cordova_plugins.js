@@ -421,7 +421,8 @@ module.exports.metadata =
     "cordova-plugin-splashscreen": "6.0.0",
     "cordova-plugin-statusbar": "2.4.3",
     "cordova-plugin-android-imei": "1.0.0",
-    "phonegap-plugin-barcodescanner": "8.1.0"
+    "phonegap-plugin-barcodescanner": "8.1.0",
+    "cordova.plugins.diagnostic": "3.0.0"
 }
 // BOTTOM OF METADATA
 });

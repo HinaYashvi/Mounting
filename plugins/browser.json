@@ -45,6 +45,9 @@
     },
     "phonegap-plugin-barcodescanner": {
       "PACKAGE_NAME": "com.phonegap.Mounting"
+    },
+    "cordova.plugins.diagnostic": {
+      "PACKAGE_NAME": "com.phonegap.Mounting"
     }
   },
   "dependent_plugins": {
