@@ -93,12 +93,12 @@ function onDeviceReady() {
             console.log("latitude = "+lat+"----longitude = "+long);
             alert("latitude = "+lat+"----longitude = "+long);
             var latlong_url = qr_code_url+"&latitude="+lat+"&longitude="+long;
-            console.log("**** "+latlong_url);
+            alert("**** "+latlong_url);
             $.ajax({
               type:'POST', 
               url:latlong_url,  
               success:function(loc_result){
-
+                alert("loc_result "+loc_result);
               }
             });
           });
