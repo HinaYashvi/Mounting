@@ -73,7 +73,7 @@ function onDeviceReady() {
     app.dialog.alert(error+" Unable to get IMEI");
     return false;
   });*/
-
+  openLOC();
   var imei_num = 866410030542785;
   $.ajax({
     type:'POST', 
@@ -86,13 +86,13 @@ function onDeviceReady() {
           var qr_code_url = result.text;
           //alert(qr_code_url);
           console.log(qr_code_url);
-          openLOC();
+          
           navigator.geolocation.getCurrentPosition(function (position){
             var lat = position.coords.latitude;
             var long = position.coords.longitude;
             console.log("latitude = "+lat+"----longitude = "+long);
             alert("latitude = "+lat+"----longitude = "+long);
-            var latlong_url = qr_code_url+"&latitude="+lat+"&longitude="+long;
+            var latlong_url = qr_code_url+"&lat="+lat+"&lng="+long;
             alert("**** "+latlong_url);
             $.ajax({
               type:'POST', 
