@@ -90,10 +90,11 @@ function onDeviceReady() {
             var lat = position.coords.latitude;
             var long = position.coords.longitude;
             //console.log("latitude = "+lat+"----longitude = "+long);
-            alert("latitude = "+lat+"----longitude = "+long);
-            //var latlong_url = qr_code_url+"&lat="+lat+"&lng="+long;
-            var latlong_url = qr_code_url+"&lat=23.2390125&lng=72.661876";
-            alert("**** "+latlong_url);
+            //alert("latitude = "+lat+"----longitude = "+long);
+            var latlong_url = qr_code_url+"&lat="+lat+"&lng="+long;
+            //var latlong_url = qr_code_url+"&lat=23.2390125&lng=72.661876";
+            //alert("**** "+latlong_url);
+            app.dialog.preloader('Please wait...');       
             $.ajax({
               type:'POST', 
               url:latlong_url,  
@@ -101,13 +102,15 @@ function onDeviceReady() {
                 //alert("loc_result "+loc_result);
                 var parseReslt = $.parseJSON(loc_result);
                 var showMessage = parseReslt.showMessage;
-                alert(showMessage);
+                if(showMessage){
+                  mainView.router.navigate("/message/"+showMessage);
+                }
               }
             });
+            app.dialog.close();
           });
         },function (qr_error) {
-          app.dialog.alert("Scanning failed: " + qr_error);
-          //$("#barcode_result").html("Scanning failed: " + error);
+          app.dialog.alert("Scanning failed: " + qr_error);          
         },
         {
           preferFrontCamera : false, // iOS and Android
@@ -137,8 +140,7 @@ function openLOC(){
       //cordova.plugins.diagnostic.switchToLocationSettings(onRequestSuccess,onRequestFailure);
       cordova.plugins.diagnostic.switchToLocationSettings();
       cordova.plugins.diagnostic.isLocationAuthorized(function(locres){
-        if(locres){
-          
+        if(locres){          
         }
       }, errorCallback);
        //mainView.loadPage("current-location.html");
@@ -150,6 +152,13 @@ function openLOC(){
     app.dialog.alert("The following error occurred: "+error);
   });   
 }
+$(document).on('page:init', '.page[data-name="message"]', function (page) {
+  checkConnection();
+  var showMessage = page.detail.route.params.showMessage;
+  setTimeout(function () {
+    $(".msg").html(showMessage);
+  },10000);
+});
 function errorCallback(error){  
   //if(error){
    app.dialog.alert(error.message);
