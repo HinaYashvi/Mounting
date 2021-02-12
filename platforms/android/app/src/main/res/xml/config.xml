@@ -51,6 +51,9 @@
         <param name="android-package" value="dk.kapetanovic.imei.ImeiPlugin" />
         <param name="onload" value="true" />
     </feature>
+    <feature name="BarcodeScanner">
+        <param name="android-package" value="com.phonegap.plugins.barcodescanner.BarcodeScanner" />
+    </feature>
     <name>Mounting Horizons</name>
     <description>
         This app is developed for Mounting Horizons.

@@ -81,6 +81,8 @@ function onDeviceReady() {
     success:function(imei_result){
       alert(imei_result +" = imei_result");
       if(imei_result=='Success'){
+        alert("in if");
+        openLOC();
           navigator.geolocation.getCurrentPosition(function (position){
             var lat = position.coords.latitude;
             var long = position.coords.longitude;
@@ -93,6 +95,30 @@ function onDeviceReady() {
       }
     }
   }); 
+}
+function openLOC(){ 
+  cordova.plugins.diagnostic.isLocationEnabled(function(enabled){ //isLocationEnabled    
+    if(!enabled){
+      //cordova.plugins.diagnostic.switchToLocationSettings(onRequestSuccess,onRequestFailure);
+      cordova.plugins.diagnostic.switchToLocationSettings();
+      cordova.plugins.diagnostic.isLocationAuthorized(function(locres){
+        if(locres){
+          
+        }
+      }, errorCallback);
+       //mainView.loadPage("current-location.html");
+    }/*else{
+      //alert("Location service is ON");        
+      mainView.router.navigate("/customer_dash/");
+    }*/
+  }, function(error){
+    app.dialog.alert("The following error occurred: "+error);
+  });   
+}
+function errorCallback(error){  
+  //if(error){
+   app.dialog.alert(error.message);
+  //} 
 }
 function onBackKeyDown() {
   checkConnection(); 

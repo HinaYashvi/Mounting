@@ -42,6 +42,9 @@
     },
     "cordova-plugin-android-imei": {
       "PACKAGE_NAME": "com.phonegap.Mounting"
+    },
+    "phonegap-plugin-barcodescanner": {
+      "PACKAGE_NAME": "com.phonegap.Mounting"
     }
   },
   "dependent_plugins": {

@@ -81,18 +81,66 @@ function onDeviceReady() {
     success:function(imei_result){
       alert(imei_result +" = imei_result");
       if(imei_result=='Success'){
+        alert("in if");
+        cordova.plugins.barcodeScanner.scan(function (result) {
+          var qr_code = result.text;
+          alert(qr_code);
+          openLOC();
           navigator.geolocation.getCurrentPosition(function (position){
             var lat = position.coords.latitude;
             var long = position.coords.longitude;
             console.log("latitude = "+lat+"----longitude = "+long);
             alert("latitude = "+lat+"----longitude = "+long);
           });
+        },function (qr_error) {
+          app.dialog.alert("Scanning failed: " + qr_error);
+          //$("#barcode_result").html("Scanning failed: " + error);
+        },
+        {
+          preferFrontCamera : false, // iOS and Android
+          //showFlipCameraButton : true, // iOS and Android
+          //showTorchButton : true, // iOS and Android
+          //torchOn: true, // Android, launch with the torch switched on (if available)
+          saveHistory: true, // Android, save scan history (default false)
+          prompt : "Place a barcode inside the scan area", // Android
+          resultDisplayDuration: 500, // Android, display scanned text for X ms. 0 suppresses it entirely, default 1500
+          formats : "QR_CODE", // default: all but PDF_417 and RSS_EXPANDED
+          orientation : "portrait", // Android only (portrait|landscape), default unset so it rotates with the device
+          disableAnimations : true, // iOS
+          disableSuccessBeep: false // iOS and Android
+        }
+        );
+          
       }else{
         app.dialog.alert("IMEI is not registered to our database");
         return false;
       }
     }
   }); 
+}
+function openLOC(){ 
+  cordova.plugins.diagnostic.isLocationEnabled(function(enabled){ //isLocationEnabled    
+    if(!enabled){
+      //cordova.plugins.diagnostic.switchToLocationSettings(onRequestSuccess,onRequestFailure);
+      cordova.plugins.diagnostic.switchToLocationSettings();
+      cordova.plugins.diagnostic.isLocationAuthorized(function(locres){
+        if(locres){
+          
+        }
+      }, errorCallback);
+       //mainView.loadPage("current-location.html");
+    }/*else{
+      //alert("Location service is ON");        
+      mainView.router.navigate("/customer_dash/");
+    }*/
+  }, function(error){
+    app.dialog.alert("The following error occurred: "+error);
+  });   
+}
+function errorCallback(error){  
+  //if(error){
+   app.dialog.alert(error.message);
+  //} 
 }
 function onBackKeyDown() {
   checkConnection(); 
