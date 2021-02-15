@@ -62,8 +62,7 @@ function onDeviceReady() {
       url:'https://csr.mountinghorizons.org/sugarcrm/index.php?entryPoint=app_verifyIMEI&IMEI='+imei_num,  
       success:function(imei_result){
         alert(imei_result +" = imei_result");
-        if(imei_result=='Success'){
-            
+        if(imei_result=='Success'){            
             //alert("in if");
             cordova.plugins.barcodeScanner.scan(function (result) {
               var qr_code_url = result.text;
@@ -182,7 +181,8 @@ function openLOC(){
       //cordova.plugins.diagnostic.switchToLocationSettings(onRequestSuccess,onRequestFailure);
       cordova.plugins.diagnostic.switchToLocationSettings();
       cordova.plugins.diagnostic.isLocationAuthorized(function(locres){
-        if(locres){          
+        if(locres){   
+          alert("location is on "+locres);       
         }
       }, errorCallback);
        //mainView.loadPage("current-location.html");
