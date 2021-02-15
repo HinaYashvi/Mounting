@@ -135,7 +135,8 @@ function onDeviceReady() {
           var qr_code_url ='https://csr.mountinghorizons.org/index.php?entryPoint=swapInOut&record=e0ad5702-4ca4-3c1a-7240-60252e9edacc';
           //alert(qr_code_url);
           //console.log('==='+'https://csr.mountinghorizons.org/index.php?entryPoint=swapInOut&record=e0ad5702-4ca4-3c1a-7240-60252e9edacc&lat=23.2390125&lng=72.661876');
-          //console.log(qr_code_url);          
+          //console.log(qr_code_url); 
+          app.preloader.show();         
           navigator.geolocation.getCurrentPosition(function (position){
 //            var lat = position.coords.latitude;
 //            var long = position.coords.longitude;
@@ -149,19 +150,19 @@ function onDeviceReady() {
               type:'POST', 
               url:latlong_url,  
               success:function(loc_result){
-                app.preloader.show();
+                
                 alert("loc_result "+loc_result);
                 var parseReslt = $.parseJSON(loc_result);
                 var showMessage = parseReslt.showMessage;
                 alert("###### "+showMessage);
                 //if(showMessage){
-                  mainView.router.navigate("/message/"+showMessage+"/");
+                  mainView.router.navigate("/message_page/"+showMessage+"/");
                 //}
-                app.preloader.hide();
+                
               }
-            });
-            
+            });            
           });
+          app.preloader.hide();
         },function (qr_error) {
           app.dialog.alert("Scanning failed: " + qr_error);          
         },
@@ -205,7 +206,7 @@ function openLOC(){
     app.dialog.alert("The following error occurred: "+error);
   });   
 }
-$(document).on('page:init', '.page[data-name="message"]', function (page) {
+$(document).on('page:init', '.page[data-name="message_page"]', function (page) {
   checkConnection();
   var showMessage = page.detail.route.params.showMessage;
   alert("in message page "+showMessage);

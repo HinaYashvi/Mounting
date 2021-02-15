@@ -11,8 +11,8 @@ var routes = [
     name: 'internet',
   }, 
   {
-    path: '/message/:showMessage/',
-    url: './message.html?showMessage={{showMessage}}',
-    name: 'message',
+    path: '/message_page/:showMessage/',
+    url: './message_page.html?showMessage={{showMessage}}',
+    name: 'message_page',
   }  
 ];
