@@ -73,41 +73,46 @@ function onDeviceReady() {
     app.dialog.alert(error+" Unable to get IMEI");
     return false;
   });*/
-  openLOC();
+  //openLOC();
   var imei_num = 866410030542785;
   $.ajax({
     type:'POST', 
     url:'https://csr.mountinghorizons.org/sugarcrm/index.php?entryPoint=app_verifyIMEI&IMEI='+imei_num,  
     success:function(imei_result){
-      //alert(imei_result +" = imei_result");
+      alert(imei_result +" = imei_result");
       if(imei_result=='Success'){
         //alert("in if");
-        cordova.plugins.barcodeScanner.scan(function (result) {
-          var qr_code_url = result.text;
-          //alert(qr_code_url);
+        //cordova.plugins.barcodeScanner.scan(function (result) {
+          //var qr_code_url = result.text;
+          var qr_code_url ='https://csr.mountinghorizons.org/index.php?entryPoint=swapInOut&record=e0ad5702-4ca4-3c1a-7240-60252e9edacc';
+          alert(qr_code_url);
+          console.log('==='+'https://csr.mountinghorizons.org/index.php?entryPoint=swapInOut&record=e0ad5702-4ca4-3c1a-7240-60252e9edacc&lat=23.2390125&lng=72.661876');
           //console.log(qr_code_url);          
           navigator.geolocation.getCurrentPosition(function (position){
-            var lat = position.coords.latitude;
-            var long = position.coords.longitude;
+            //var lat = position.coords.latitude;
+            //var long = position.coords.longitude;
             //console.log("latitude = "+lat+"----longitude = "+long);
-            alert("latitude = "+lat+"----longitude = "+long);
+            //alert("latitude = "+lat+"----longitude = "+long);
             //var latlong_url = qr_code_url+"&lat="+lat+"&lng="+long;
             var latlong_url = qr_code_url+"&lat=23.2390125&lng=72.661876";
             alert("**** "+latlong_url);
+            app.dialog.show();       
             $.ajax({
               type:'POST', 
               url:latlong_url,  
               success:function(loc_result){
-                //alert("loc_result "+loc_result);
+                alert("loc_result "+loc_result);
                 var parseReslt = $.parseJSON(loc_result);
                 var showMessage = parseReslt.showMessage;
-                alert(showMessage);
+                if(showMessage){
+                  mainView.router.navigate("/message/"+showMessage);
+                }
               }
             });
+            app.dialog.hide();
           });
-        },function (qr_error) {
-          app.dialog.alert("Scanning failed: " + qr_error);
-          //$("#barcode_result").html("Scanning failed: " + error);
+        /*},function (qr_error) {
+          app.dialog.alert("Scanning failed: " + qr_error);          
         },
         {
           preferFrontCamera : false, // iOS and Android
@@ -122,7 +127,7 @@ function onDeviceReady() {
           disableAnimations : true, // iOS
           disableSuccessBeep: false // iOS and Android
         }
-        );
+        );*/
           
       }else{
         app.dialog.alert("IMEI is not registered to our database");
@@ -137,8 +142,7 @@ function openLOC(){
       //cordova.plugins.diagnostic.switchToLocationSettings(onRequestSuccess,onRequestFailure);
       cordova.plugins.diagnostic.switchToLocationSettings();
       cordova.plugins.diagnostic.isLocationAuthorized(function(locres){
-        if(locres){
-          
+        if(locres){          
         }
       }, errorCallback);
        //mainView.loadPage("current-location.html");
@@ -150,6 +154,13 @@ function openLOC(){
     app.dialog.alert("The following error occurred: "+error);
   });   
 }
+$(document).on('page:init', '.page[data-name="message"]', function (page) {
+  checkConnection();
+  var showMessage = page.detail.route.params.showMessage;
+  setTimeout(function () {
+    $(".msg").html(showMessage);
+  },10000);
+});
 function errorCallback(error){  
   //if(error){
    app.dialog.alert(error.message);

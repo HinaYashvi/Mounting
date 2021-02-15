@@ -54,6 +54,7 @@ document.addEventListener("deviceready", checkStorage, false);
 document.addEventListener("deviceready", onDeviceReady, false);
 document.addEventListener("backbutton", onBackKeyDown, false);
 function onDeviceReady() { 
+  openLOC();
   /*cordova.plugins.IMEI(function (error, imei) {
     var imei_num = imei;
     $.ajax({
@@ -73,18 +74,20 @@ function onDeviceReady() {
     app.dialog.alert(error+" Unable to get IMEI");
     return false;
   });*/
-  openLOC();
+  
   var imei_num = 866410030542785;
   $.ajax({
     type:'POST', 
     url:'https://csr.mountinghorizons.org/sugarcrm/index.php?entryPoint=app_verifyIMEI&IMEI='+imei_num,  
     success:function(imei_result){
-      //alert(imei_result +" = imei_result");
+      alert(imei_result +" = imei_result");
       if(imei_result=='Success'){
         //alert("in if");
         cordova.plugins.barcodeScanner.scan(function (result) {
           var qr_code_url = result.text;
+          //var qr_code_url ='https://csr.mountinghorizons.org/index.php?entryPoint=swapInOut&record=e0ad5702-4ca4-3c1a-7240-60252e9edacc';
           //alert(qr_code_url);
+          //console.log('==='+'https://csr.mountinghorizons.org/index.php?entryPoint=swapInOut&record=e0ad5702-4ca4-3c1a-7240-60252e9edacc&lat=23.2390125&lng=72.661876');
           //console.log(qr_code_url);          
           navigator.geolocation.getCurrentPosition(function (position){
             var lat = position.coords.latitude;
@@ -93,21 +96,23 @@ function onDeviceReady() {
             //alert("latitude = "+lat+"----longitude = "+long);
             var latlong_url = qr_code_url+"&lat="+lat+"&lng="+long;
             //var latlong_url = qr_code_url+"&lat=23.2390125&lng=72.661876";
-            //alert("**** "+latlong_url);
-            app.dialog.preloader('Please wait...');       
+            alert("**** "+latlong_url);
+            //app.dialog.show();       
             $.ajax({
               type:'POST', 
               url:latlong_url,  
               success:function(loc_result){
-                //alert("loc_result "+loc_result);
+                app.preloader.show();
+                alert("loc_result "+loc_result);
                 var parseReslt = $.parseJSON(loc_result);
                 var showMessage = parseReslt.showMessage;
                 if(showMessage){
                   mainView.router.navigate("/message/"+showMessage);
                 }
+                app.preloader.hide();
               }
             });
-            app.dialog.close();
+            
           });
         },function (qr_error) {
           app.dialog.alert("Scanning failed: " + qr_error);          
