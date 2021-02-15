@@ -80,7 +80,7 @@ function onDeviceReady() {
     type:'POST', 
     url:'https://csr.mountinghorizons.org/sugarcrm/index.php?entryPoint=app_verifyIMEI&IMEI='+imei_num,  
     success:function(imei_result){
-      alert(imei_result +" = imei_result");
+      //alert(imei_result +" = imei_result");
       if(imei_result=='Success'){
         //alert("in if");
         cordova.plugins.barcodeScanner.scan(function (result) {
@@ -88,7 +88,8 @@ function onDeviceReady() {
           //var qr_code_url ='https://csr.mountinghorizons.org/index.php?entryPoint=swapInOut&record=e0ad5702-4ca4-3c1a-7240-60252e9edacc';
           //alert(qr_code_url);
           //console.log('==='+'https://csr.mountinghorizons.org/index.php?entryPoint=swapInOut&record=e0ad5702-4ca4-3c1a-7240-60252e9edacc&lat=23.2390125&lng=72.661876');
-          //console.log(qr_code_url);          
+          //console.log(qr_code_url);
+          app.preloader.show();          
           navigator.geolocation.getCurrentPosition(function (position){
             var lat = position.coords.latitude;
             var long = position.coords.longitude;
@@ -96,24 +97,22 @@ function onDeviceReady() {
             //alert("latitude = "+lat+"----longitude = "+long);
             var latlong_url = qr_code_url+"&lat="+lat+"&lng="+long;
             //var latlong_url = qr_code_url+"&lat=23.2390125&lng=72.661876";
-            alert("**** "+latlong_url);
+            //alert("**** "+latlong_url);
             //app.dialog.show();       
             $.ajax({
               type:'POST', 
               url:latlong_url,  
-              success:function(loc_result){
-                app.preloader.show();
+              success:function(loc_result){                
                 alert("loc_result "+loc_result);
                 var parseReslt = $.parseJSON(loc_result);
                 var showMessage = parseReslt.showMessage;
-                if(showMessage){
+                //if(showMessage){
                   mainView.router.navigate("/message/"+showMessage);
-                }
-                app.preloader.hide();
+                //}                
               }
-            });
-            
+            });            
           });
+          app.preloader.hide();
         },function (qr_error) {
           app.dialog.alert("Scanning failed: " + qr_error);          
         },
@@ -160,6 +159,7 @@ function openLOC(){
 $(document).on('page:init', '.page[data-name="message"]', function (page) {
   checkConnection();
   var showMessage = page.detail.route.params.showMessage;
+  alert("~~~~~~~~~~~ "+showMessage);
   setTimeout(function () {
     $(".msg").html(showMessage);
   },10000);
