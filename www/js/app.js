@@ -63,7 +63,7 @@ function onDeviceReady() {
       success:function(imei_result){
         alert(imei_result +" = imei_result");
         if(imei_result=='Success'){
-            app.preloader.show();
+            
             //alert("in if");
             cordova.plugins.barcodeScanner.scan(function (result) {
               var qr_code_url = result.text;
@@ -90,6 +90,7 @@ function onDeviceReady() {
                 disableSuccessBeep: false // iOS and Android
               }
             ); // SCANNER CODE ENDS //
+            app.preloader.show();
         }else{
           app.dialog.alert("IMEI is not registered to our database");
           return false;
@@ -146,7 +147,7 @@ function onDeviceReady() {
   }); */
 }
 function getLatLong(qr_code_url){
-//  alert("in fucntion getLatLong");
+  alert("in fucntion getLatLong");
 //  app.preloader.show();         
   navigator.geolocation.getCurrentPosition(function (position){
   var lat = position.coords.latitude;
