@@ -55,7 +55,7 @@ document.addEventListener("deviceready", onDeviceReady, false);
 document.addEventListener("backbutton", onBackKeyDown, false);
 function onDeviceReady() { 
   openLOC();
-  cordova.plugins.IMEI(function (error, imei) {
+  /*cordova.plugins.IMEI(function (error, imei) {
     var imei_num = imei;
     $.ajax({
       type:'POST', 
@@ -99,9 +99,9 @@ function onDeviceReady() {
   },function(error){
     app.dialog.alert(error+" Unable to get IMEI");
     return false;
-  }); // IMEI CODE ENDS //
+  }); // IMEI CODE ENDS //*/
   
-  /*var imei_num = 866410030542785;
+  var imei_num = 866410030542785;
   $.ajax({
     type:'POST', 
     url:'https://csr.mountinghorizons.org/sugarcrm/index.php?entryPoint=app_verifyIMEI&IMEI='+imei_num,  
@@ -143,7 +143,7 @@ function onDeviceReady() {
         return false;
       }
     }
-  }); */
+  }); 
 }
 function getLatLong(qr_code_url){
   alert("in fucntion getLatLong");
