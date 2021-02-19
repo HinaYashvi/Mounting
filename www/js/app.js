@@ -178,10 +178,11 @@ function getLatLong(qr_code_url){
         $(".msg").html(showMessage);
         setTimeout(function () {
          $(".msg").hide();
+         call_locFun();
         },10000);
         //app.preloader.hide();
         app.dialog.close();
-        call_locFun();
+        
       }
     });            
   });  
@@ -225,7 +226,8 @@ function call_locFun(){
               getLatLong(qr_code_url);
               //alert(qr_code_url);             
               },function (qr_error) {
-                app.dialog.alert("Scanning failed: " + qr_error);   
+                //app.dialog.alert("Scanning failed: " + qr_error);   
+                console.log("Scanning failed: " + qr_error);
                 //app.preloader.hide();       
 //                app.dialog.close();
               },
