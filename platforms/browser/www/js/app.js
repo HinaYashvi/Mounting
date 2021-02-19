@@ -55,10 +55,10 @@ document.addEventListener("deviceready", checkStorage, false);
 document.addEventListener("deviceready", onDeviceReady, false);
 document.addEventListener("backbutton", onBackKeyDown, false);
 function onDeviceReady() { 
-  //app.preloader.show();
+  //app.preloader.show();  
+  openLOC();
   app.dialog.preloader('Verifying...');
-//  openLOC();
-  /*cordova.plugins.IMEI(function (error, imei) {
+  cordova.plugins.IMEI(function (error, imei) {
     var imei_num = imei;
     $.ajax({
       type:'POST', 
@@ -104,9 +104,9 @@ function onDeviceReady() {
   },function(error){
     app.dialog.alert(error+" Unable to get IMEI");
     return false;
-  }); // IMEI CODE ENDS //*/
+  }); // IMEI CODE ENDS //
   
-  var imei_num = 866410030542785;
+  /*var imei_num = 866410030542785;
   $.ajax({
     type:'POST', 
     url:'https://csr.mountinghorizons.org/sugarcrm/index.php?entryPoint=app_verifyIMEI&IMEI='+imei_num,  
@@ -149,25 +149,25 @@ function onDeviceReady() {
         return false;
       }
     }
-  }); 
+  }); */
 }
 function getLatLong(qr_code_url){
   alert("in fucntion getLatLong");
 //  app.preloader.show();         
   navigator.geolocation.getCurrentPosition(function (position){
-//  var lat = position.coords.latitude;
-//  var long = position.coords.longitude;
+  var lat = position.coords.latitude;
+  var long = position.coords.longitude;
     //console.log("latitude = "+lat+"----longitude = "+long);
     //alert("latitude = "+lat+"----longitude = "+long);
-//  var latlong_url = qr_code_url+"&lat="+lat+"&lng="+long;
-    var latlong_url = qr_code_url+"&lat=23.2390125&lng=72.661876";
+  var latlong_url = qr_code_url+"&lat="+lat+"&lng="+long;
+//    var latlong_url = qr_code_url+"&lat=23.2390125&lng=72.661876";
     alert("**** "+latlong_url);
     //app.dialog.show();       
     $.ajax({
       type:'POST', 
       url:latlong_url,  
       success:function(loc_result){        
-        //alert("loc_result "+loc_result);
+        alert("loc_result "+loc_result);
         var parseReslt = $.parseJSON(loc_result);
         var showMessage = parseReslt.showMessage;
         alert("###### "+showMessage);
