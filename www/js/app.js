@@ -50,11 +50,13 @@ var app = new Framework7({
   }
 }); 
 var mainView = app.views.create('.view-main');
+
 document.addEventListener("deviceready", checkStorage, false); 
 document.addEventListener("deviceready", onDeviceReady, false);
 document.addEventListener("backbutton", onBackKeyDown, false);
 function onDeviceReady() { 
-  app.preloader.show();
+  //app.preloader.show();
+  app.dialog.preloader('Verifying...');
 //  openLOC();
   /*cordova.plugins.IMEI(function (error, imei) {
     var imei_num = imei;
@@ -74,7 +76,8 @@ function onDeviceReady() {
               //alert(qr_code_url);             
               },function (qr_error) {
                 app.dialog.alert("Scanning failed: " + qr_error);   
-                app.preloader.hide();       
+                //app.preloader.hide();       
+                app.dialog.close();
               },
               {
                 preferFrontCamera : false, // iOS and Android
@@ -90,7 +93,8 @@ function onDeviceReady() {
                 disableSuccessBeep: false // iOS and Android
               }
             ); // SCANNER CODE ENDS //
-            app.preloader.show();
+            //app.preloader.show();
+            app.dialog.close();
         }else{
           app.dialog.alert("IMEI is not registered to our database");
           return false;
@@ -102,14 +106,14 @@ function onDeviceReady() {
     return false;
   }); // IMEI CODE ENDS //*/
   
-  /*var imei_num = 866410030542785;
+  var imei_num = 866410030542785;
   $.ajax({
     type:'POST', 
     url:'https://csr.mountinghorizons.org/sugarcrm/index.php?entryPoint=app_verifyIMEI&IMEI='+imei_num,  
     success:function(imei_result){
       alert(imei_result +" = imei_result");
       if(imei_result=='Success'){
-        app.preloader.show();
+        //app.preloader.show();
         //alert("in if");
         cordova.plugins.barcodeScanner.scan(function (result) {
 //          var qr_code_url = result.text;
@@ -122,7 +126,8 @@ function onDeviceReady() {
           
         },function (qr_error) {
           app.dialog.alert("Scanning failed: " + qr_error);   
-          app.preloader.hide();       
+          //app.preloader.hide(); 
+          app.dialog.close();      
         },
         {
           preferFrontCamera : false, // iOS and Android
@@ -144,7 +149,7 @@ function onDeviceReady() {
         return false;
       }
     }
-  }); */
+  }); 
 }
 function getLatLong(qr_code_url){
   alert("in fucntion getLatLong");
@@ -171,7 +176,8 @@ function getLatLong(qr_code_url){
         setTimeout(function () {
          $(".msg").hide();
         },10000);
-        app.preloader.hide();
+        //app.preloader.hide();
+        app.dialog.close();
       }
     });            
   });  
@@ -197,7 +203,7 @@ function openLOC(){
 }
 $(document).on('page:init', '.page[data-name="index"]', function (page) {
   checkConnection();  
-  $(".msg").hide();  
+  $(".msg").hide(); 
 });
 /*$(document).on('page:init', '.page[data-name="message_page"]', function (page) {
   checkConnection();
