@@ -58,7 +58,7 @@ function onDeviceReady() {
   //app.preloader.show();  
   openLOC();
 //  app.dialog.preloader('Verifying...');
-  /*cordova.plugins.IMEI(function (error, imei) {
+  cordova.plugins.IMEI(function (error, imei) {
     var imei_num = imei;
     $.ajax({
       type:'POST', 
@@ -106,7 +106,7 @@ function onDeviceReady() {
     app.dialog.alert(error+" Unable to get IMEI");
     app.dialog.close();
     return false;
-  }); // IMEI CODE ENDS //*/
+  }); // IMEI CODE ENDS //
   
   /*var imei_num = 866410030542785;
   $.ajax({
@@ -154,7 +154,7 @@ function onDeviceReady() {
   }); */
 }
 function getLatLong(qr_code_url){
-//  alert("in fucntion getLatLong");
+  alert("in fucntion getLatLong");
 //  app.preloader.show();  
   app.dialog.preloader('Verifying...');       
   navigator.geolocation.getCurrentPosition(function (position){
@@ -193,12 +193,12 @@ function openLOC(){
       cordova.plugins.diagnostic.isLocationAuthorized(function(locres){
         if(locres){   
           //alert("location is on "+locres);   
-          call_locFun();    
+          //call_locFun();    
         }
       }, errorCallback); 
        //mainView.loadPage("current-location.html");
     }else{
-      //alert("Location service is ON");        
+      alert("Location service is ON");        
       //mainView.router.navigate("/customer_dash/");
       call_locFun();
     }
