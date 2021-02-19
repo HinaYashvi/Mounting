@@ -57,7 +57,156 @@ document.addEventListener("backbutton", onBackKeyDown, false);
 function onDeviceReady() { 
   //app.preloader.show();  
   openLOC();
-  app.dialog.preloader('Verifying...');
+//  app.dialog.preloader('Verifying...');
+  /*cordova.plugins.IMEI(function (error, imei) {
+    var imei_num = imei;
+    $.ajax({
+      type:'POST', 
+      url:'https://csr.mountinghorizons.org/sugarcrm/index.php?entryPoint=app_verifyIMEI&IMEI='+imei_num,  
+      success:function(imei_result){
+//        alert(imei_result +" = imei_result");
+        if(imei_result=='Success'){            
+            //alert("in if");
+            cordova.plugins.barcodeScanner.scan(function (result) {
+              var qr_code_url = result.text;
+              //var qr_code_url ='https://csr.mountinghorizons.org/index.php?entryPoint=swapInOut&record=e0ad5702-4ca4-3c1a-7240-60252e9edacc';
+              //console.log('==='+'https://csr.mountinghorizons.org/index.php?entryPoint=swapInOut&record=e0ad5702-4ca4-3c1a-7240-60252e9edacc&lat=23.2390125&lng=72.661876');
+              //console.log(qr_code_url);
+              getLatLong(qr_code_url);
+              //alert(qr_code_url);             
+              },function (qr_error) {
+                app.dialog.alert("Scanning failed: " + qr_error);   
+                //app.preloader.hide();       
+//                app.dialog.close();
+              },
+              {
+                preferFrontCamera : false, // iOS and Android
+                //showFlipCameraButton : true, // iOS and Android
+                //showTorchButton : true, // iOS and Android
+                //torchOn: true, // Android, launch with the torch switched on (if available)
+                saveHistory: true, // Android, save scan history (default false)
+                prompt : "Place a barcode inside the scan area", // Android
+                resultDisplayDuration: 500, // Android, display scanned text for X ms. 0 suppresses it entirely, default 1500
+                formats : "QR_CODE", // default: all but PDF_417 and RSS_EXPANDED
+                orientation : "portrait", // Android only (portrait|landscape), default unset so it rotates with the device
+                disableAnimations : true, // iOS
+                disableSuccessBeep: false // iOS and Android
+              }
+            ); // SCANNER CODE ENDS //
+            //app.preloader.show();
+//            app.dialog.close();
+        }else{
+          app.dialog.alert("IMEI is not registered to our database");
+          app.dialog.close();
+          return false;
+        }// imei_result ends //
+      } // success ends //
+    }); // ajax ends //
+  },function(error){
+    app.dialog.alert(error+" Unable to get IMEI");
+    app.dialog.close();
+    return false;
+  }); // IMEI CODE ENDS //*/
+  
+  /*var imei_num = 866410030542785;
+  $.ajax({
+    type:'POST', 
+    url:'https://csr.mountinghorizons.org/sugarcrm/index.php?entryPoint=app_verifyIMEI&IMEI='+imei_num,  
+    success:function(imei_result){
+      alert(imei_result +" = imei_result");
+      if(imei_result=='Success'){
+        //app.preloader.show();
+        //alert("in if");
+        cordova.plugins.barcodeScanner.scan(function (result) {
+//          var qr_code_url = result.text;
+          var qr_code_url ='https://csr.mountinghorizons.org/index.php?entryPoint=swapInOut&record=e0ad5702-4ca4-3c1a-7240-60252e9edacc';
+          //console.log('==='+'https://csr.mountinghorizons.org/index.php?entryPoint=swapInOut&record=e0ad5702-4ca4-3c1a-7240-60252e9edacc&lat=23.2390125&lng=72.661876');
+          //console.log(qr_code_url);
+          getLatLong(qr_code_url);
+          //alert(qr_code_url);
+           
+          
+        },function (qr_error) {
+          app.dialog.alert("Scanning failed: " + qr_error);   
+          //app.preloader.hide(); 
+          app.dialog.close();      
+        },
+        {
+          preferFrontCamera : false, // iOS and Android
+          //showFlipCameraButton : true, // iOS and Android
+          //showTorchButton : true, // iOS and Android
+          //torchOn: true, // Android, launch with the torch switched on (if available)
+          saveHistory: true, // Android, save scan history (default false)
+          prompt : "Place a barcode inside the scan area", // Android
+          resultDisplayDuration: 500, // Android, display scanned text for X ms. 0 suppresses it entirely, default 1500
+          formats : "QR_CODE", // default: all but PDF_417 and RSS_EXPANDED
+          orientation : "portrait", // Android only (portrait|landscape), default unset so it rotates with the device
+          disableAnimations : true, // iOS
+          disableSuccessBeep: false // iOS and Android
+        }
+        );
+          
+      }else{
+        app.dialog.alert("IMEI is not registered to our database");
+        return false;
+      }
+    }
+  }); */
+}
+function getLatLong(qr_code_url){
+//  alert("in fucntion getLatLong");
+//  app.preloader.show();  
+  app.dialog.preloader('Verifying...');       
+  navigator.geolocation.getCurrentPosition(function (position){
+  var lat = position.coords.latitude;
+  var long = position.coords.longitude;
+    //console.log("latitude = "+lat+"----longitude = "+long);
+    //alert("latitude = "+lat+"----longitude = "+long);
+  var latlong_url = qr_code_url+"&lat="+lat+"&lng="+long;
+//    var latlong_url = qr_code_url+"&lat=23.2390125&lng=72.661876";
+//    alert("**** "+latlong_url);
+    //app.dialog.show();       
+    $.ajax({
+      type:'POST', 
+      url:latlong_url,  
+      success:function(loc_result){        
+//        alert("loc_result "+loc_result);
+        var parseReslt = $.parseJSON(loc_result);
+        var showMessage = parseReslt.showMessage;
+//        alert("###### "+showMessage);
+        $(".msg").show();
+        $(".msg").html(showMessage);
+        setTimeout(function () {
+         $(".msg").hide();
+        },10000);
+        //app.preloader.hide();
+        app.dialog.close();
+      }
+    });            
+  });  
+}
+function openLOC(){ 
+  cordova.plugins.diagnostic.isLocationEnabled(function(enabled){ //isLocationEnabled    
+    if(!enabled){
+      //cordova.plugins.diagnostic.switchToLocationSettings(onRequestSuccess,onRequestFailure);
+      cordova.plugins.diagnostic.switchToLocationSettings();
+      cordova.plugins.diagnostic.isLocationAuthorized(function(locres){
+        if(locres){   
+          //alert("location is on "+locres);   
+          call_locFun();    
+        }
+      }, errorCallback); 
+       //mainView.loadPage("current-location.html");
+    }else{
+      //alert("Location service is ON");        
+      //mainView.router.navigate("/customer_dash/");
+      call_locFun();
+    }
+  }, function(error){
+    app.dialog.alert("The following error occurred: "+error);
+  });   
+}
+function call_locFun(){
   cordova.plugins.IMEI(function (error, imei) {
     var imei_num = imei;
     $.ajax({
@@ -107,101 +256,6 @@ function onDeviceReady() {
     app.dialog.close();
     return false;
   }); // IMEI CODE ENDS //
-  
-  /*var imei_num = 866410030542785;
-  $.ajax({
-    type:'POST', 
-    url:'https://csr.mountinghorizons.org/sugarcrm/index.php?entryPoint=app_verifyIMEI&IMEI='+imei_num,  
-    success:function(imei_result){
-      alert(imei_result +" = imei_result");
-      if(imei_result=='Success'){
-        //app.preloader.show();
-        //alert("in if");
-        cordova.plugins.barcodeScanner.scan(function (result) {
-//          var qr_code_url = result.text;
-          var qr_code_url ='https://csr.mountinghorizons.org/index.php?entryPoint=swapInOut&record=e0ad5702-4ca4-3c1a-7240-60252e9edacc';
-          //console.log('==='+'https://csr.mountinghorizons.org/index.php?entryPoint=swapInOut&record=e0ad5702-4ca4-3c1a-7240-60252e9edacc&lat=23.2390125&lng=72.661876');
-          //console.log(qr_code_url);
-          getLatLong(qr_code_url);
-          //alert(qr_code_url);
-           
-          
-        },function (qr_error) {
-          app.dialog.alert("Scanning failed: " + qr_error);   
-          //app.preloader.hide(); 
-          app.dialog.close();      
-        },
-        {
-          preferFrontCamera : false, // iOS and Android
-          //showFlipCameraButton : true, // iOS and Android
-          //showTorchButton : true, // iOS and Android
-          //torchOn: true, // Android, launch with the torch switched on (if available)
-          saveHistory: true, // Android, save scan history (default false)
-          prompt : "Place a barcode inside the scan area", // Android
-          resultDisplayDuration: 500, // Android, display scanned text for X ms. 0 suppresses it entirely, default 1500
-          formats : "QR_CODE", // default: all but PDF_417 and RSS_EXPANDED
-          orientation : "portrait", // Android only (portrait|landscape), default unset so it rotates with the device
-          disableAnimations : true, // iOS
-          disableSuccessBeep: false // iOS and Android
-        }
-        );
-          
-      }else{
-        app.dialog.alert("IMEI is not registered to our database");
-        return false;
-      }
-    }
-  }); */
-}
-function getLatLong(qr_code_url){
-//  alert("in fucntion getLatLong");
-//  app.preloader.show();         
-  navigator.geolocation.getCurrentPosition(function (position){
-  var lat = position.coords.latitude;
-  var long = position.coords.longitude;
-    //console.log("latitude = "+lat+"----longitude = "+long);
-    //alert("latitude = "+lat+"----longitude = "+long);
-  var latlong_url = qr_code_url+"&lat="+lat+"&lng="+long;
-//    var latlong_url = qr_code_url+"&lat=23.2390125&lng=72.661876";
-//    alert("**** "+latlong_url);
-    //app.dialog.show();       
-    $.ajax({
-      type:'POST', 
-      url:latlong_url,  
-      success:function(loc_result){        
-//        alert("loc_result "+loc_result);
-        var parseReslt = $.parseJSON(loc_result);
-        var showMessage = parseReslt.showMessage;
-//        alert("###### "+showMessage);
-        $(".msg").show();
-        $(".msg").html(showMessage);
-        setTimeout(function () {
-         $(".msg").hide();
-        },10000);
-        //app.preloader.hide();
-        app.dialog.close();
-      }
-    });            
-  });  
-}
-function openLOC(){ 
-  cordova.plugins.diagnostic.isLocationEnabled(function(enabled){ //isLocationEnabled    
-    if(!enabled){
-      //cordova.plugins.diagnostic.switchToLocationSettings(onRequestSuccess,onRequestFailure);
-      cordova.plugins.diagnostic.switchToLocationSettings();
-      cordova.plugins.diagnostic.isLocationAuthorized(function(locres){
-        if(locres){   
-          //alert("location is on "+locres);       
-        }
-      }, errorCallback); 
-       //mainView.loadPage("current-location.html");
-    }/*else{
-      //alert("Location service is ON");        
-      mainView.router.navigate("/customer_dash/");
-    }*/
-  }, function(error){
-    app.dialog.alert("The following error occurred: "+error);
-  });   
 }
 $(document).on('page:init', '.page[data-name="index"]', function (page) {
   checkConnection();  
