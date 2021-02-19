@@ -54,7 +54,8 @@ document.addEventListener("deviceready", checkStorage, false);
 document.addEventListener("deviceready", onDeviceReady, false);
 document.addEventListener("backbutton", onBackKeyDown, false);
 function onDeviceReady() { 
-  openLOC();
+  app.preloader.show();
+//  openLOC();
   /*cordova.plugins.IMEI(function (error, imei) {
     var imei_num = imei;
     $.ajax({
@@ -101,7 +102,7 @@ function onDeviceReady() {
     return false;
   }); // IMEI CODE ENDS //*/
   
-  var imei_num = 866410030542785;
+  /*var imei_num = 866410030542785;
   $.ajax({
     type:'POST', 
     url:'https://csr.mountinghorizons.org/sugarcrm/index.php?entryPoint=app_verifyIMEI&IMEI='+imei_num,  
@@ -111,8 +112,8 @@ function onDeviceReady() {
         app.preloader.show();
         //alert("in if");
         cordova.plugins.barcodeScanner.scan(function (result) {
-          var qr_code_url = result.text;
-          //var qr_code_url ='https://csr.mountinghorizons.org/index.php?entryPoint=swapInOut&record=e0ad5702-4ca4-3c1a-7240-60252e9edacc';
+//          var qr_code_url = result.text;
+          var qr_code_url ='https://csr.mountinghorizons.org/index.php?entryPoint=swapInOut&record=e0ad5702-4ca4-3c1a-7240-60252e9edacc';
           //console.log('==='+'https://csr.mountinghorizons.org/index.php?entryPoint=swapInOut&record=e0ad5702-4ca4-3c1a-7240-60252e9edacc&lat=23.2390125&lng=72.661876');
           //console.log(qr_code_url);
           getLatLong(qr_code_url);
@@ -143,19 +144,19 @@ function onDeviceReady() {
         return false;
       }
     }
-  }); 
+  }); */
 }
 function getLatLong(qr_code_url){
   alert("in fucntion getLatLong");
 //  app.preloader.show();         
   navigator.geolocation.getCurrentPosition(function (position){
-  var lat = position.coords.latitude;
-  var long = position.coords.longitude;
+//  var lat = position.coords.latitude;
+//  var long = position.coords.longitude;
     //console.log("latitude = "+lat+"----longitude = "+long);
     //alert("latitude = "+lat+"----longitude = "+long);
-  var latlong_url = qr_code_url+"&lat="+lat+"&lng="+long;
-    //var latlong_url = qr_code_url+"&lat=23.2390125&lng=72.661876";
-    //alert("**** "+latlong_url);
+//  var latlong_url = qr_code_url+"&lat="+lat+"&lng="+long;
+    var latlong_url = qr_code_url+"&lat=23.2390125&lng=72.661876";
+    alert("**** "+latlong_url);
     //app.dialog.show();       
     $.ajax({
       type:'POST', 
