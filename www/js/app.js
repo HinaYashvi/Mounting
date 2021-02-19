@@ -154,7 +154,7 @@ function onDeviceReady() {
   }); */
 }
 function getLatLong(qr_code_url){
-  alert("in fucntion getLatLong");
+//  alert("in fucntion getLatLong");
 //  app.preloader.show();  
   app.dialog.preloader('Verifying...');       
   navigator.geolocation.getCurrentPosition(function (position){
@@ -181,6 +181,7 @@ function getLatLong(qr_code_url){
         },10000);
         //app.preloader.hide();
         app.dialog.close();
+        call_locFun();
       }
     });            
   });  
@@ -198,7 +199,7 @@ function openLOC(){
       }, errorCallback); 
        //mainView.loadPage("current-location.html");
     }else{
-      alert("Location service is ON");        
+//      alert("Location service is ON");        
       //mainView.router.navigate("/customer_dash/");
       call_locFun();
     }
