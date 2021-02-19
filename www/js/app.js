@@ -75,7 +75,8 @@ function onDeviceReady() {
               getLatLong(qr_code_url);
               //alert(qr_code_url);             
               },function (qr_error) {
-                app.dialog.alert("Scanning failed: " + qr_error);   
+                //app.dialog.alert("Scanning failed: " + qr_error);  
+                console.log("Scanning failed: " + qr_error); 
                 //app.preloader.hide();       
 //                app.dialog.close();
               },
