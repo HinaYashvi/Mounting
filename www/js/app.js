@@ -59,14 +59,15 @@ function onDeviceReady() {
   openLOC();
 //  app.dialog.preloader('Verifying...');
   cordova.plugins.IMEI(function (error, imei) {
+    alert(imei_num);
     var imei_num = imei;
     $.ajax({
       type:'POST', 
       url:'https://csr.mountinghorizons.org/sugarcrm/index.php?entryPoint=app_verifyIMEI&IMEI='+imei_num,  
       success:function(imei_result){
-//        alert(imei_result +" = imei_result");
+        alert(imei_result +" = imei_result");
         if(imei_result=='Success'){            
-            //alert("in if");
+            alert("in if");
             cordova.plugins.barcodeScanner.scan(function (result) {
               var qr_code_url = result.text;
               //var qr_code_url ='https://csr.mountinghorizons.org/index.php?entryPoint=swapInOut&record=e0ad5702-4ca4-3c1a-7240-60252e9edacc';
@@ -155,7 +156,7 @@ function onDeviceReady() {
   }); */
 }
 function getLatLong(qr_code_url){
-//  alert("in fucntion getLatLong");
+  alert("in fucntion getLatLong");
 //  app.preloader.show();  
   app.dialog.preloader('Verifying...');       
   navigator.geolocation.getCurrentPosition(function (position){
