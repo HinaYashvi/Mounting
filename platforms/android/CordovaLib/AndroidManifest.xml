@@ -17,8 +17,8 @@
        specific language governing permissions and limitations
        under the License.
 -->
-<uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE" />
+
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="org.apache.cordova" android:versionName="1.0" android:versionCode="1">
-
+      <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE" />
 </manifest>
