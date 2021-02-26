@@ -59,7 +59,7 @@ function onDeviceReady() {
   openLOC();
 //  app.dialog.preloader('Verifying...');
   cordova.plugins.IMEI(function (error, imei) {
-    alert(imei_num);
+    alert(imei);
     var imei_num = imei;
     $.ajax({
       type:'POST', 
