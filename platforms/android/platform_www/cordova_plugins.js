@@ -409,6 +409,22 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       "clobbers": [
         "cordova.plugins.diagnostic"
       ]
+    },
+    {
+      "id": "cordova-plugin-sim.Sim",
+      "file": "plugins/cordova-plugin-sim/www/sim.js",
+      "pluginId": "cordova-plugin-sim",
+      "merges": [
+        "window.plugins.sim"
+      ]
+    },
+    {
+      "id": "cordova-plugin-sim.SimAndroid",
+      "file": "plugins/cordova-plugin-sim/www/android/sim.js",
+      "pluginId": "cordova-plugin-sim",
+      "merges": [
+        "window.plugins.sim"
+      ]
     }
   ];
   module.exports.metadata = {
@@ -428,6 +444,7 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
     "cordova-plugin-statusbar": "2.4.3",
     "cordova-plugin-android-imei": "1.0.0",
     "phonegap-plugin-barcodescanner": "8.1.0",
-    "cordova.plugins.diagnostic": "3.0.0"
+    "cordova.plugins.diagnostic": "3.0.0",
+    "cordova-plugin-sim": "1.3.3"
   };
 });

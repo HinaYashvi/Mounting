@@ -48,6 +48,9 @@
     },
     "cordova.plugins.diagnostic": {
       "PACKAGE_NAME": "com.phonegap.Mounting"
+    },
+    "cordova-plugin-sim": {
+      "PACKAGE_NAME": "com.phonegap.Mounting"
     }
   },
   "dependent_plugins": {

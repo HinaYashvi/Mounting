@@ -59,51 +59,55 @@ function onDeviceReady() {
   openLOC();
 //  app.dialog.preloader('Verifying...');
   cordova.plugins.IMEI(function (error, imei) {
-    alert(imei);
-    var imei_num = imei;
-    $.ajax({
-      type:'POST', 
-      url:'https://csr.mountinghorizons.org/sugarcrm/index.php?entryPoint=app_verifyIMEI&IMEI='+imei_num,  
-      success:function(imei_result){
-        alert(imei_result +" = imei_result");
-        if(imei_result=='Success'){            
-            alert("in if");
-            cordova.plugins.barcodeScanner.scan(function (result) {
-              var qr_code_url = result.text;
-              //var qr_code_url ='https://csr.mountinghorizons.org/index.php?entryPoint=swapInOut&record=e0ad5702-4ca4-3c1a-7240-60252e9edacc';
-              //console.log('==='+'https://csr.mountinghorizons.org/index.php?entryPoint=swapInOut&record=e0ad5702-4ca4-3c1a-7240-60252e9edacc&lat=23.2390125&lng=72.661876');
-              //console.log(qr_code_url);
-              getLatLong(qr_code_url);
-              //alert(qr_code_url);             
-              },function (qr_error) {
-                //app.dialog.alert("Scanning failed: " + qr_error);  
-                console.log("Scanning failed: " + qr_error); 
-                //app.preloader.hide();       
-//                app.dialog.close();
-              },
-              {
-                preferFrontCamera : false, // iOS and Android
-                //showFlipCameraButton : true, // iOS and Android
-                //showTorchButton : true, // iOS and Android
-                //torchOn: true, // Android, launch with the torch switched on (if available)
-                saveHistory: true, // Android, save scan history (default false)
-                prompt : "Place a barcode inside the scan area", // Android
-                resultDisplayDuration: 500, // Android, display scanned text for X ms. 0 suppresses it entirely, default 1500
-                formats : "QR_CODE", // default: all but PDF_417 and RSS_EXPANDED
-                orientation : "portrait", // Android only (portrait|landscape), default unset so it rotates with the device
-                disableAnimations : true, // iOS
-                disableSuccessBeep: false // iOS and Android
-              }
-            ); // SCANNER CODE ENDS //
-            //app.preloader.show();
-//            app.dialog.close();
-        }else{
-          app.dialog.alert("IMEI is not registered to our database");
-          app.dialog.close();
-          return false;
-        }// imei_result ends //
-      } // success ends //
-    }); // ajax ends //
+    if(imei=='' || imei==undefined){
+      window.plugins.sim.getSimInfo(successsimCallback, errorsimCallback);
+    }else{
+      alert(imei);
+      var imei_num = imei;
+      $.ajax({
+        type:'POST', 
+        url:'https://csr.mountinghorizons.org/sugarcrm/index.php?entryPoint=app_verifyIMEI&IMEI='+imei_num,  
+        success:function(imei_result){
+          alert(imei_result +" = imei_result");
+          if(imei_result=='Success'){            
+              alert("in if");
+              cordova.plugins.barcodeScanner.scan(function (result) {
+                var qr_code_url = result.text;
+                //var qr_code_url ='https://csr.mountinghorizons.org/index.php?entryPoint=swapInOut&record=e0ad5702-4ca4-3c1a-7240-60252e9edacc';
+                //console.log('==='+'https://csr.mountinghorizons.org/index.php?entryPoint=swapInOut&record=e0ad5702-4ca4-3c1a-7240-60252e9edacc&lat=23.2390125&lng=72.661876');
+                //console.log(qr_code_url);
+                getLatLong(qr_code_url);
+                //alert(qr_code_url);             
+                },function (qr_error) {
+                  //app.dialog.alert("Scanning failed: " + qr_error);  
+                  console.log("Scanning failed: " + qr_error); 
+                  //app.preloader.hide();       
+  //                app.dialog.close();
+                },
+                {
+                  preferFrontCamera : false, // iOS and Android
+                  //showFlipCameraButton : true, // iOS and Android
+                  //showTorchButton : true, // iOS and Android
+                  //torchOn: true, // Android, launch with the torch switched on (if available)
+                  saveHistory: true, // Android, save scan history (default false)
+                  prompt : "Place a barcode inside the scan area", // Android
+                  resultDisplayDuration: 500, // Android, display scanned text for X ms. 0 suppresses it entirely, default 1500
+                  formats : "QR_CODE", // default: all but PDF_417 and RSS_EXPANDED
+                  orientation : "portrait", // Android only (portrait|landscape), default unset so it rotates with the device
+                  disableAnimations : true, // iOS
+                  disableSuccessBeep: false // iOS and Android
+                }
+              ); // SCANNER CODE ENDS //
+              //app.preloader.show();
+  //            app.dialog.close();
+          }else{
+            app.dialog.alert("IMEI is not registered to our database");
+            app.dialog.close();
+            return false;
+          }// imei_result ends //
+        } // success ends //
+      }); // ajax ends //
+    }
   },function(error){
     app.dialog.alert(error+" Unable to get IMEI");
     app.dialog.close();
@@ -154,6 +158,25 @@ function onDeviceReady() {
       }
     }
   }); */
+}
+function hasReadPermission() {
+  //alert("in hasReadPermission");
+  window.plugins.sim.hasReadPermission(successsimCallback, errorsimCallback);
+}
+
+// Android only: request permission
+function requestReadPermission() {
+  //alert("in requestReadPermission");
+  window.plugins.sim.requestReadPermission(successsimCallback, errorsimCallback);
+
+}
+function successsimCallback(result) {
+    alert("success===== " +result);
+    var phoneno_1 = result.cards[0].phoneNumber;
+    alert("phoneno_1===== " +phoneno_1);
+}
+function errorsimCallback(error) {
+    alert("error===== " +error);
 }
 function getLatLong(qr_code_url){
   alert("in fucntion getLatLong");
